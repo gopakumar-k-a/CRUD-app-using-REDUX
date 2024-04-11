@@ -1,0 +1,51 @@
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 1rem;
+  }
+  
+  .logo {
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+    margin-right: 1rem;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  nav ul li a:hover {
+    color: #ffd700; /* Change color on hover */
+  }
+  
+  .auth-links a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+  }
+  
+  .auth-links a:hover {
+    text-decoration: underline;
+  }
+  
+  .auth-links a:first-child:hover {
+    color: #00ff00; /* Change color of login link on hover */
+  }
+  
+  .auth-links a:last-child:hover {
+    color: #ff0000; /* Change color of register link on hover */
+  }
+  
