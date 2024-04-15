@@ -7,7 +7,8 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: ''
+    message: '',
+    count: 0,
 }
 //register user
 export const register = createAsyncThunk('auth/register', async (user, thunkAPI) => {
@@ -18,7 +19,7 @@ export const register = createAsyncThunk('auth/register', async (user, thunkAPI)
         return thunkAPI.rejectWithValue(message)
     }
 })
-//login  user
+//login  admin
 export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
     try {
         return await authService.login(user)
@@ -33,15 +34,28 @@ export const logout = createAsyncThunk('auth/logout', async () => {
     await authService.logout()
 })
 
+export const updateUser = createAsyncThunk('auth/updateuser', async (newUser, thunkAPI) => {
+    console.log('update user new user ', newUser);
+    const token = thunkAPI.getState().auth.user.token;
+    console.log('token newUser ', token, newUser);
+    return await authService.updateUser(newUser, token)
+})
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         reset: (state) => {
-            state.isLoading = false
-            state.isSuccess = false
-            state.isError = false
-            state.message = ''
+            state.isLoading = false;
+            state.isSuccess = false;
+            state.isError = false;
+            state.message = '';
+        },
+        increment: (state) => {
+            state.count++
+        },
+        decrement: (state) => {
+            state.count--
         }
     },
     extraReducers: (builder) => {
@@ -77,8 +91,21 @@ export const authSlice = createSlice({
             .addCase(logout.fulfilled, (state) => {
                 state.user = null
             })
+            .addCase(updateUser.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload
+            })
     }
 })
 
 export default authSlice.reducer
-export const { reset } = authSlice.actions
+export const { reset ,increment,decrement} = authSlice.actions

@@ -5,7 +5,8 @@ const {verifyToken}=require('../middlewares/authMiddleware')
 
 user.post('/login',userController.loginUser)
 user.post('/register',userController.registerUser)
-user.get('/profile',verifyToken,userController.userProfile)
+user.post('/updateprofile',verifyToken,userController.updateUserProfile)
+
 
 
 module.exports=user

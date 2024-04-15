@@ -5,14 +5,14 @@ import {useSelector,useDispatch} from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import '../index.css'
-import { login,reset } from '../features/auth/authSlice';
+import { login,reset,increment,decrement } from '../features/auth/authSlice';
 import Spinner from '../components/Spinner/Spinner';
-import { set } from 'mongoose';
 
 function Login() {
     const dispatch=useDispatch()
     const navigate=useNavigate()
-    const {user,isLoading,isError,isSuccess,message}=useSelector((state)=>state.auth)
+    const {user,isLoading,isError,isSuccess,message,count}=useSelector((state)=>state.auth)
+    
 
     useEffect(()=>{
         if(isError){
@@ -20,7 +20,7 @@ function Login() {
         }
 
         if(isSuccess || user){
-            navigate('/')
+            navigate('/dashboard')
         }
 
         dispatch(reset())
@@ -77,6 +77,7 @@ function Login() {
         <div>
             <div className='form-main-div'>
                 <form className="form">
+           
                     <p className="title">Login </p>
                     <p className="message">SigIn now and Enter to app. </p>
 

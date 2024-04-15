@@ -4,26 +4,27 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import '../index.css';
-import { adminLogin, reset } from '../features/auth/authSlice';
+import { adminLogin, reset } from '../features/admin/adminSlice';
 import Spinner from '../components/Spinner/Spinner';
 
 function AdminLogin() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+    const { admin, isLoading, isError, isSuccess, message } = useSelector((state) => state.admin);
 
     useEffect(() => {
         if (isError) {
             toast.error(message);
         }
 
-        if (isSuccess || user) {
+        if (isSuccess && admin) {
             // Redirect to admin dashboard upon successful login
             navigate('/admin/dashboard');
         }
 
-        dispatch(reset());
-    }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+       
+    }, [admin, isError, isSuccess, message, navigate, dispatch]);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -59,7 +60,8 @@ function AdminLogin() {
                 email,
                 password
             };
-            // dispatch(adminLogin(data));
+            dispatch(adminLogin(data));
+            navigate('/admin')
         } else {
             setErrors(errors);
         }

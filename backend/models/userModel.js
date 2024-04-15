@@ -12,11 +12,14 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: [true, 'please enter password']
+    }, imgUrl: {
+        type: String,
+        default: ''
     },
-    isAdmin:{
-        type:Boolean,
-        default:false
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
-},{timestamps:true})
+}, { timestamps: true })
 
 module.exports = mongoose.model('user', userSchema)

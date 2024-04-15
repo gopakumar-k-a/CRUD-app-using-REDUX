@@ -14,13 +14,14 @@ module.exports = {
     //@access public
     loginUser: asyncHandler(async (req, res) => {
         const { email, password } = req.body
-        const user = await userModel.findOne({ email: email })
+        const user = await userModel.findOne({ email: email, isAdmin: false })
         if (user && bcrypt.compare(password, user.password)) {
             res.json({
                 _id: user._id,
                 name: user.name,
                 email: email,
-                token: await generateToken({ id: user._id,name:user.name,email:email })
+                imgUrl: user.imgUrl,
+                token: await generateToken({ id: user._id, name: user.name, email: email })
             })
         } else {
             res.status(400)
@@ -58,18 +59,53 @@ module.exports = {
             message: 'success',
             name: name,
             email: email,
-            token: await generateToken({ id: data._id,name:data.name,email:data.email })
+            token: await generateToken({ id: data._id, name: data.name, email: data.email })
         })
 
     }),
 
-    userProfile:asyncHandler(async(req,res)=>{
-        if(req.user){
-            console.log('req.user ',req.user);
+    updateUserProfile: asyncHandler(async (req, res) => {
+        const { name, email, imgUrl } = req.body
+        if (!name || !email) {
+            res.status(400)
+            throw new Error('required fields are missing')
         }
-        // const {_id,name,email}=await userModel.findOne({_id:req.user.id})
-        res.status(200).json(req.user)
-    })
+        const userId = req.user._id
+        const existingUser=await userModel.findOne({email:email})
+        if(existingUser && existingUser._id.toString() != userId){
+          res.status(400)
+          throw new Error('already used email')
+        }
+        const updateObject = {
+            name: name,
+            email: email
+        };
+        if (imgUrl) {
+            updateObject.imgUrl = imgUrl;
+        }
+
+        const updatedUser = await userModel.findOneAndUpdate(
+            { _id: userId },
+            updateObject,
+            { new: true }
+        );
+        if (!updatedUser) {
+            res.status(404)
+            throw new Error('user is not updated')
+        }
+
+        res.status(200).json({
+            message: 'User updated successfully!',
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            imgUrl: updatedUser.imgUrl,
+            token: await generateToken({ id: updatedUser._id, name: updatedUser.name, email: updatedUser.email })
+        });
+
+    }),
+
+
 
 
 

@@ -5,17 +5,15 @@ import Dashboard from './pages/Dashboard';
 import Register from './pages/Register';
 import Header from './components/Header/Header';
 import Profile from './pages/Profile';
-import AdminLogin from './pages/adminLogin';
+import AdminLogin from './pages/AdminLogin';
 import './components/Toaster/Toaster.css'
-import { useSelector } from 'react-redux'
 import AdminHeader from './components/AdminHeader/AdminHeader'
-
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
-  
+
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith('/admin');
-
   return (
     <>
 
@@ -26,6 +24,9 @@ function App() {
         <Route path='/' element={<Dashboard />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/admin' element={<AdminLogin />} />
+        <Route path='/admin/dashboard' element={<AdminDashboard />} />
+        <Route path='*' element={<div>not found</div>} />
+
       </Routes>
       <ToastContainer />
     </>

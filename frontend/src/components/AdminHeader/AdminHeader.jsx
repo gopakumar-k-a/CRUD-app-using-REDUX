@@ -3,35 +3,28 @@ import './AdminHeader.css';
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, reset } from '../../features/auth/authSlice';
+import { adminLogout, reset } from '../../features/admin/adminSlice';
 
 function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { user } = useSelector((state) => state.auth)
+  const { admin } = useSelector((state) => state.admin)
   const handleLogout = () => {
-    dispatch(logout())
+    dispatch(adminLogout())
     dispatch(reset())
-    navigate('/')
+    navigate('/admin')
   }
   return (
     <header>
-      <Link to='/'><div className="logo">User Management</div></Link>
-      {user && <nav>
-        <ul>
-          <div className="auth-links">
-            <Link to='/'><a href="#">Dashboard</a></Link>
-            <Link to='/profile'><a href="#">My Profile</a></Link>
-          </div>
-        </ul>
-      </nav>}
+      <Link to='/admin/dashboard'><div className="logo">User Management admin side</div></Link>
+
       <div className="auth-links">
-        {user ? (<>
+        
+        {admin ? (<>
 
           <a href="#" onClick={handleLogout}>Logout</a></>) : (
           <>
-            <Link to='/login'><a href="#">Login</a></Link>
-            <Link to='/register'><a href="#">Register</a></Link>
+            <Link to='/admin'><a href="#">Login</a></Link>
           </>)}
 
 
